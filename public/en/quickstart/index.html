@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Quick Start | Kubesysadm</title>
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+
+      <script src="/js/main.js"></script>
+
+
+</head>
+<body>
+  <header>
+    <div class="header" >
+    <div class="header_left"><img src="/log.png"></div>
+    <div class="header_right">
+     <ul>
+         <li>
+             
+             <a aria-label="icon" href="/zh"  target="_self">
+                 <i class="fas fa-globe"></i>
+                 <span>中文(简体)</span>
+             </a>
+             
+         </li>
+         <li>
+             <a aria-label="icon" href="https://twitter.com/kubesysadm" data-target="https://twitter.com/kubesysadm" target="_blank">
+                 <i class="fab fa-twitter" ></i>
+             </a>
+         </li>
+         <li>
+             <a aria-label="icon" href="https://kubesysadm.slack.com" data-target="https://kubesysadm.slack.com" target="_blank">
+                <i class="fa-brands fa-slack"></i>
+             </a>
+         </li>
+
+         <li>
+             <a aria-label="icon" href="https://github.com/kubesysadm" data-target="https://github.com/kubesysadm" target="_blank">
+                <i class="fab fa-github"> </i>
+            </a>
+         </li>
+
+
+     </ul>
+    </div>
+ </div>
+
+
+  </header>
+  <main>
+    
+<div class="main">
+  <div class="main_left">
+    <div class="main_left_div">
+   <li>
+       
+          <a href="/en/">
+       
+       Introduction
+   </a>
+ </li>
+   <li>
+       
+          <a href="https://www.sysadm.cn">
+       
+       Sysadm
+   </a>
+ </li>
+
+
+   <li>
+       <a href="/en/contributing/">Contributing</a>
+   </li>
+
+   <li>
+       <a href="/en/features/">Features</a>
+   </li>
+
+   <li>
+       <a href="/en/quickstart/">Quick Start</a>
+   </li>
+
+</div>
+  </div>
+  <div class="main_right">
+    <h1>Quick Start</h1>
+    
+    
+    <time datetime="2024-07-14T18:29:44&#43;08:00">July 14, 2024</time>
+
+    <h3 id="prerequisites">Prerequisites</h3>
+<ul>
+<li>kubectl version v1.12+ with CRD support.</li>
+<li>Access to a Kubernetes v1.12+ cluster.</li>
+</ul>
+<h3 id="install-crd-and-instance-of-kubesysadm-into--cluster">Install CRD and instance of Kubesysadm into  cluster</h3>
+<p>Install Kubesysadm on an existing Kubernetes cluster. This way is both available for x86_64 and arm64 architecture.</p>
+<pre tabindex="0"><code>  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/install.yaml
+</code></pre><p>Enjoy! Kubesysadm will create the following resources in the cluster</p>
+<pre tabindex="0"><code>namespace/kubesysadm-system created
+customresourcedefinition.apiextensions.k8s.io/cmmonitors.monitoring.sysadm.cn created
+customresourcedefinition.apiextensions.k8s.io/podcleanrules.monitoring.sysadm.cn created
+serviceaccount/kubesysadm-controller-manager created
+role.rbac.authorization.k8s.io/kubesysadm-leader-election-role created
+clusterrole.rbac.authorization.k8s.io/kubesysadm-cmmonitor-editor-role created
+clusterrole.rbac.authorization.k8s.io/kubesysadm-cmmonitor-viewer-role created
+clusterrole.rbac.authorization.k8s.io/kubesysadm-manager-role created
+clusterrole.rbac.authorization.k8s.io/kubesysadm-metrics-reader created
+clusterrole.rbac.authorization.k8s.io/kubesysadm-proxy-role created
+rolebinding.rbac.authorization.k8s.io/kubesysadm-leader-election-rolebinding created
+clusterrolebinding.rbac.authorization.k8s.io/kubesysadm-manager-rolebinding created
+clusterrolebinding.rbac.authorization.k8s.io/kubesysadm-proxy-rolebinding created
+service/kubesysadm-controller-manager-metrics-service created
+deployment.apps/kubesysadm-controller-manager created
+</code></pre><p>Check whether kubesysadm controller is running by the following command</p>
+<pre tabindex="0"><code>kubectl get po -n kubesysadm-system
+</code></pre><p>The output of the above command like the following showing</p>
+<pre tabindex="0"><code>NAME                                             READY   STATUS    RESTARTS   AGE
+kubesysadm-controller-manager-5f78865594-b6gsc   2/2     Running   0          2m30s
+</code></pre><h3 id="configure-configmap-monitoring-rules">Configure configMap monitoring rules</h3>
+<p>In the following example we will to do the following things:</p>
+<ul>
+<li>Create a namespace named test-kubesysadm</li>
+<li>Create a configMap named cm-env in test-kubesysadm namespace</li>
+<li>Create a configMap named cm-mount in test-kubesysadm namespace</li>
+<li>Create configMap monitoring rules named cm-env and cm-mount</li>
+<li>Create a deployment named test-kubesysadm in test-kubesysadm namespace which using cm-env and cm-mount configMap</li>
+</ul>
+<p>We create the above resource by the following commands:</p>
+<pre tabindex="0"><code class="language-azure" data-lang="azure">  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/configMap/create_ns.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/configMap/cm-env.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/configMap/cm-mount.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/configMap/cmmonitor_cm-env.yaml    
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/configMap/cmmonitor_cm-mount.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/configMap/deploy.yaml
+</code></pre><p>Now we try to check the results
+We get the pods&rsquo; status by the following command</p>
+<pre tabindex="0"><code class="language-azure" data-lang="azure">  kubectl get po -n test-kubesysadm
+</code></pre><!-- raw HTML omitted -->
+<p>Then we try to change cm-env/cm-mount configMap by the following command. After that, we will find that the pods of
+deployment test-kubesysadm will be restared like the following image shown.</p>
+<pre tabindex="0"><code class="language-azure" data-lang="azure">  kubectl edit cm -n test-kubesysadm cm-env/cm-mount 
+</code></pre><!-- raw HTML omitted -->
+<h3 id="configure-secret-monitoring-rules">Configure secret monitoring rules</h3>
+<p>Like configMap, in the following example we will to do the following things:</p>
+<ul>
+<li>Create a namespace named test-kubesysadm</li>
+<li>Create a secret named secret-env in test-kubesysadm namespace</li>
+<li>Create a secret named secret-mount in test-kubesysadm namespace</li>
+<li>Create secret monitoring rules named secret-env and secret-mount</li>
+<li>Create a deployment named test-kubesysadm in test-kubesysadm namespace which using secret-env and secret-mount secret</li>
+</ul>
+<p>We create the above resource by the following commands:</p>
+<pre tabindex="0"><code class="language-azure" data-lang="azure">  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/secret/create_ns.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/secret/secret_env.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/secret/secret_mount.yaml 
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/secret/cmmonitor_secret-env.yaml    
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/secret/cmmonitor_secret-mount.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/secret/deploy.yaml
+</code></pre><p>Now we try to check the results
+We get the pods&rsquo; status by the following command</p>
+<pre tabindex="0"><code class="language-azure" data-lang="azure">  kubectl get po -n test-kubesysadm
+</code></pre><!-- raw HTML omitted -->
+<p>Then we try to change secret-env/secret-mount secret by the following command. After that, we will find that the pods of
+deployment test-kubesysadm will be restared like the following image shown.</p>
+<pre tabindex="0"><code class="language-azure" data-lang="azure">  kubectl edit secret -n test-kubesysadm secret-env/secret-mount
+</code></pre><!-- raw HTML omitted -->
+<h3 id="configure-pod-cleaning-rules">Configure Pod Cleaning rules</h3>
+<p>In the following example we will to do the following things:</p>
+<ul>
+<li>Create a namespace named test-kubesysadm</li>
+<li>Create a Job named job1</li>
+<li>Create a PodCleanRule named cleanpods. The age value of rule is 300 and namespace is test-kubesysadm. That meaning is
+PodCleanManager will clean the pods which created before 5 minutes and in no-running/no-pending status.</li>
+</ul>
+<p>We create the above resource by the following commands:</p>
+<pre tabindex="0"><code class="language-azure" data-lang="azure">  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/podclean/create_ns.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/podclean/podcleanrule.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/podclean/job.yaml
+</code></pre><p>Now we try to check the results
+We get the pods&rsquo; status by the following command</p>
+<pre tabindex="0"><code class="language-azure" data-lang="azure">  kubectl get po -n test-kubesysadm
+</code></pre><!-- raw HTML omitted -->
+<p>We found that all pods in &ldquo;Completed&rdquo; status in test-kubesysadm namespace have be deleted after 5 minutes when we re-run
+the above command. And we get the log message like the following image shown when we run the following command.</p>
+<pre tabindex="0"><code class="language-azure" data-lang="azure">   kubectl logs -n kubesysadm-system kubesysadm-controller-manager-5f78865594-b6gsc
+</code></pre><!-- raw HTML omitted -->
+
+  </div>
+</div>
+
+  </main>
+  <footer>
+    <p>Copyright 2024. All rights reserved.</p>
+
+  </footer>
+</body>
+</html>
