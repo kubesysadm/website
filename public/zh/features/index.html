@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>功能特性 | Kubesysadm</title>
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+
+      <script src="/js/main.js"></script>
+
+
+</head>
+<body>
+  <header>
+    <div class="header" >
+    <div class="header_left"><img src="/log.png"></div>
+    <div class="header_right">
+     <ul>
+         <li>
+             
+                <a aria-label="icon" href="/en"  target="_self">
+                   <i class="fas fa-globe"></i>
+                    <span>English</span>
+                 </a>
+             
+         </li>
+         <li>
+             <a aria-label="icon" href="https://twitter.com/kubesysadm" data-target="https://twitter.com/kubesysadm" target="_blank">
+                 <i class="fab fa-twitter" ></i>
+             </a>
+         </li>
+         <li>
+             <a aria-label="icon" href="https://kubesysadm.slack.com" data-target="https://kubesysadm.slack.com" target="_blank">
+                <i class="fa-brands fa-slack"></i>
+             </a>
+         </li>
+
+         <li>
+             <a aria-label="icon" href="https://github.com/kubesysadm" data-target="https://github.com/kubesysadm" target="_blank">
+                <i class="fab fa-github"> </i>
+            </a>
+         </li>
+
+
+     </ul>
+    </div>
+ </div>
+
+
+  </header>
+  <main>
+    
+<div class="main">
+  <div class="main_left">
+    <div class="main_left_div">
+   <li>
+       
+          <a href="/zh/">
+       
+       简介
+   </a>
+ </li>
+   <li>
+       
+          <a href="https://www.sysadm.cn">
+       
+       Sysadm
+   </a>
+ </li>
+
+
+   <li>
+       <a href="/zh/features/">功能特性</a>
+   </li>
+
+   <li>
+       <a href="/zh/contributing/">贡献</a>
+   </li>
+
+   <li>
+       <a href="/zh/quickstart/">快速开始</a>
+   </li>
+
+</div>
+  </div>
+  <div class="main_right">
+    <h1>功能特性</h1>
+    
+    
+    <time datetime="2024-07-14T18:15:06&#43;08:00">2024年7月14日</time>
+
+    <p>当前Kubesysadm所具有功能特性如下所述：</p>
+<ul>
+<li>
+<p>自动优雅地重启负载</p>
+<p>我们知道工作负载(Deployment, statfulset, DaemaonSet)在引用了configMap/secret时，如果configMap/Secret内容变化后，它们所对应的Pod
+不会自动优雅地重新启动。这将导致对configMap/secrets的更新不能及时应用于工作负载</p>
+<p>kubesysadm可以根据用户配置的规则监视工作负载引用的configMaps/secrets。当Kubesysadm发现
+工作负载所引用的configMap/secret内容发生改变时，它会自动的优雅地重新启动对应的工作负载，</p>
+</li>
+<li>
+<p>自动清除非运行状态的Pod
+我们知道K8S集群中没有非运行状态的pod(如Completed, Error状态)不会被自动删除。Kubesysadm可以
+根据用户设置的规则清除不运行的pod。</p>
+</li>
+<li>
+<p>清除Pod规则配置
+用户可以配置清除非运行状态Pod的规则</p>
+</li>
+<li>
+<p>监控规则配置
+用户可以配置监控规则。</p>
+</li>
+</ul>
+
+  </div>
+</div>
+
+  </main>
+  <footer>
+    <p>Copyright 2024. All rights reserved.</p>
+
+  </footer>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<div class="header" >
+    <div class="header_left"><img src="/log.png"></div>
+    <div class="header_right">
+     <ul>
+         <li>
+             {{ if eq .Language.Lang "en" }}
+             <a aria-label="icon" href="/zh"  target="_self">
+                 <i class="fas fa-globe"></i>
+                 <span>中文(简体)</span>
+             </a>
+             {{ else }}
+                <a aria-label="icon" href="/en"  target="_self">
+                   <i class="fas fa-globe"></i>
+                    <span>English</span>
+                 </a>
+             {{ end }}
+         </li>
+         <li>
+             <a aria-label="icon" href="https://twitter.com/kubesysadm" data-target="https://twitter.com/kubesysadm" target="_blank">
+                 <i class="fab fa-twitter" ></i>
+             </a>
+         </li>
+         <li>
+             <a aria-label="icon" href="https://kubesysadm.slack.com" data-target="https://kubesysadm.slack.com" target="_blank">
+                <i class="fa-brands fa-slack"></i>
+             </a>
+         </li>
+
+         <li>
+             <a aria-label="icon" href="https://github.com/kubesysadm" data-target="https://github.com/kubesysadm" target="_blank">
+                <i class="fab fa-github"> </i>
+            </a>
+         </li>
+
+
+     </ul>
+    </div>
+ </div>
+

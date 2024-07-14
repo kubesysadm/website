@@ -1,0 +1,42 @@
+baseURL = 'https://kubesysadm.sysadm.cn/'
+languageCode = 'en-us'
+title = 'Kubesysadm'
+theme = 'kubesysadm'
+defaultContentLanguage = 'en'
+defaultContentLanguageInSubdir = true
+
+[languages]
+  [languages.en]
+    contentDir = 'content/en'
+    disabled = false
+    languageCode = 'en-US'
+    languageDirection = 'ltr'
+    languageName = 'English'
+    title = 'Kubesysadm'
+    weight = 2
+    [languages.en.menus]
+      [[languages.en.menus.main]]
+        name = 'Introduction'
+        pageRef = '/'
+        weight = 10
+      [[languages.en.menus.main]]
+        name = 'Sysadm'
+        url = 'https://www.sysadm.cn'
+        weight = 20
+  [languages.zh]
+    contentDir = 'content/zh'
+    disabled = false
+    languageCode = 'zh-CN'
+    languageDirection = 'ltr'
+    languageName = '中文'
+    title = 'Kubesysadm'
+    weight = 1
+    [languages.zh.menus]
+      [[languages.zh.menus.main]]
+        name = '简介'
+        pageRef = '/'
+        weight = 10
+      [[languages.zh.menus.main]]
+        name = 'Sysadm'
+        url = 'https://www.sysadm.cn'
+        weight = 30
