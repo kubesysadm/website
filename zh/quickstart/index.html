@@ -1,0 +1,44 @@
+<!doctype html><html lang=zh-CN dir=ltr><head><meta charset=utf-8><meta name=viewport content="width=device-width"><title>快速开始 | Kubesysadm</title>
+<link rel=stylesheet href=/css/main.min.00fcdc6beccb79d86a3dd2c84157a1fff0e5d30ab88beea988f47738598b7c44.css integrity="sha256-APzca+zLedhqPdLIQVeh//Dl0wq4i+6piPR3OFmLfEQ=" crossorigin=anonymous><link rel=stylesheet href=/css/all.min.min.c1fb7484bf22344d06bc60d47674585fea13a654ae76d53e8ddd605844cb5463.css integrity="sha256-wft0hL8iNE0GvGDUdnRYX+oTplSudtU+jd1gWETLVGM=" crossorigin=anonymous><script src=/js/main.23cd0c7d837263b9eaeb96ee2d9ccfa2969daa3fa00fa1c1fe8701a9b87251a1.js integrity="sha256-I80MfYNyY7nq65buLZzPopadqj+gD6HB/ocBqbhyUaE=" crossorigin=anonymous></script></head><body><header><div class=header><div class=header_left><img src=/log.png></div><div class=header_right><ul><li><a aria-label=icon href=/en target=_self><i class="fas fa-globe"></i>
+<span>English</span></a></li><li><a aria-label=icon href=https://twitter.com/kubesysadm data-target=https://twitter.com/kubesysadm target=_blank><i class="fab fa-twitter"></i></a></li><li><a aria-label=icon href=https://kubesysadm.slack.com data-target=https://kubesysadm.slack.com target=_blank><i class="fa-brands fa-slack"></i></a></li><li><a aria-label=icon href=https://github.com/kubesysadm data-target=https://github.com/kubesysadm target=_blank><i class="fab fa-github"></i></a></li></ul></div></div></header><main><div class=main><div class=main_left><div class=main_left_div><li><a href=/zh/>简介</a></li><li><a href=https://www.sysadm.cn>Sysadm</a></li><li><a href=/zh/features/>功能特性</a></li><li><a href=/zh/contributing/>贡献</a></li><li><a href=/zh/quickstart/>快速开始</a></li></div></div><div class=main_right><h1>快速开始</h1><time datetime=2024-07-14T18:29:48+08:00>2024年7月14日</time><h3 id=前置条件>前置条件</h3><ul><li>kubectl version v1.12+ with CRD support.</li><li>Access to a Kubernetes v1.12+ cluster.</li></ul><h3 id=安装kubernetes的crd实例到k8s集群>安装Kubernetes的CRD实例到K8S集群</h3><p>在已有的Kubernetes集群上安装Kubesysadm。这种方式对x86_64和arm64体系结构都可用。</p><pre tabindex=0><code>  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/install.yaml
+</code></pre><p>上述命令将会在集群内创建如下资源。</p><pre tabindex=0><code>namespace/kubesysadm-system created
+customresourcedefinition.apiextensions.k8s.io/cmmonitors.monitoring.sysadm.cn created
+customresourcedefinition.apiextensions.k8s.io/podcleanrules.monitoring.sysadm.cn created
+serviceaccount/kubesysadm-controller-manager created
+role.rbac.authorization.k8s.io/kubesysadm-leader-election-role created
+clusterrole.rbac.authorization.k8s.io/kubesysadm-cmmonitor-editor-role created
+clusterrole.rbac.authorization.k8s.io/kubesysadm-cmmonitor-viewer-role created
+clusterrole.rbac.authorization.k8s.io/kubesysadm-manager-role created
+clusterrole.rbac.authorization.k8s.io/kubesysadm-metrics-reader created
+clusterrole.rbac.authorization.k8s.io/kubesysadm-proxy-role created
+rolebinding.rbac.authorization.k8s.io/kubesysadm-leader-election-rolebinding created
+clusterrolebinding.rbac.authorization.k8s.io/kubesysadm-manager-rolebinding created
+clusterrolebinding.rbac.authorization.k8s.io/kubesysadm-proxy-rolebinding created
+service/kubesysadm-controller-manager-metrics-service created
+deployment.apps/kubesysadm-controller-manager created
+</code></pre><p>使用下列命令检查kubesysadm 控制器是否已正常运行</p><pre tabindex=0><code>kubectl get po -n kubesysadm-system
+</code></pre><p>上述命令输出类似如下内容：</p><pre tabindex=0><code>NAME                                             READY   STATUS    RESTARTS   AGE
+kubesysadm-controller-manager-5f78865594-b6gsc   2/2     Running   0          2m30s
+</code></pre><h3 id=配置configmap监控规则>配置configMap监控规则</h3><p>在下面的例子中，我们将做以下事情:</p><ul><li>创建一个名字为test-kubesysadm的命名空间</li><li>在test-kubesysadm命名空间下创建一个名字叫cm-env的configMap。</li><li>在test-kubesysadm命名空间下创建一个名字叫cm-mount的configMap。</li><li>分别创建名字为cm-env和cm-mount的configMap监控规则。</li><li>在test-kubesysadm创建一个名字为test-kubesysadm的deployment,其使用了cm-env和cm-mount configMap</li></ul><p>通过下列命令创建上述资源:</p><pre tabindex=0><code class=language-azure data-lang=azure>  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/configMap/create_ns.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/configMap/cm-env.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/configMap/cm-mount.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/configMap/cmmonitor_cm-env.yaml    
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/configMap/cmmonitor_cm-mount.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/configMap/deploy.yaml
+</code></pre><p>通过下列命令查看Pod的运行状态：</p><pre tabindex=0><code class=language-azure data-lang=azure>  kubectl get po -n test-kubesysadm
+</code></pre><p>然后，我们尝试通过下列命令来修改cm-env/cm-mount configMap的内容，之后我们可以看到deployment test-kubesysadm的Pod将会被重启，如下图所示：</p><pre tabindex=0><code class=language-azure data-lang=azure>  kubectl edit cm -n test-kubesysadm cm-env/cm-mount 
+</code></pre><h3 id=配置secret监控进则>配置secret监控进则</h3><p>与configMap类似, 在下面的例子中，我们将做以下事情:</p><ul><li>创建一个名字为test-kubesysadm的命名空间</li><li>在test-kubesysadm命名空间下创建一个名字叫secret-env的secret。</li><li>在test-kubesysadm命名空间下创建一个名字叫secret-mount的secret</li><li>分别创建名字为secret-env和secret-mount的secret监控规则</li><li>在test-kubesysadm创建一个名字为test-kubesysadm的deployment,其使用了secret-env和secret-mount secret</li></ul><p>通过下列命令创建上述资源:</p><pre tabindex=0><code class=language-azure data-lang=azure>  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/secret/create_ns.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/secret/secret_env.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/secret/secret_mount.yaml 
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/secret/cmmonitor_secret-env.yaml    
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/secret/cmmonitor_secret-mount.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/secret/deploy.yaml
+</code></pre><p>通过下列命令查看Pod的运行状态：</p><pre tabindex=0><code class=language-azure data-lang=azure>  kubectl get po -n test-kubesysadm
+</code></pre><p>然后，我们尝试通过下列命令来修改secret-env/secret-mount secret的内容，之后我们可以看到deployment test-kubesysadm的Pod将会被重启，如下图所示：</p><pre tabindex=0><code class=language-azure data-lang=azure>  kubectl edit secret -n test-kubesysadm secret-env/secret-mount
+</code></pre><h3 id=配置pod-cleaning-规则configure-pod-cleaning-rules>配置Pod Cleaning 规则Configure Pod Cleaning rules</h3><p>在下面的例子中，我们将做以下事情:</p><ul><li>创建一个名字为test-kubesysadm的命名空间</li><li>在test-kubesysadm命名空间下创建一个名字为job1的Job</li><li>创建一个名称为cleanpods的Pod Cleaning规则。规则的age字段值为300， namespace为test-kubesysadm.这条规则的含义是
+PodCleanManager将清除创建于5分钟前，且处于非Running和非Pending状态的Pod.</li></ul><p>通过下列命令查看Pod的运行状态：</p><pre tabindex=0><code class=language-azure data-lang=azure>  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/podclean/create_ns.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/podclean/podcleanrule.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubesysadm/kubesysadm/main/installer/podclean/job.yaml
+</code></pre><p>通过下列命令检查结果。</p><pre tabindex=0><code class=language-azure data-lang=azure>  kubectl get po -n test-kubesysadm
+</code></pre><p>当我们重新运行时，我们发现test-kubesysadm命名空间中所有状态为"Completed"的pod在5分钟后被删除了</p><pre tabindex=0><code class=language-azure data-lang=azure>   kubectl logs -n kubesysadm-system kubesysadm-controller-manager-5f78865594-b6gsc
+</code></pre></div></div></main><footer><p>Copyright 2024. All rights reserved.</p></footer></body></html>
